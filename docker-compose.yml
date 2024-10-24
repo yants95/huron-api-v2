@@ -1,0 +1,20 @@
+services:
+  huron-mongo:
+    container_name: huron-mongo
+    image: mongo:6.0.6
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - huron-network
+    environment:
+      MONGODB_REPLICA_SET_MODE: primary
+      ALLOW_EMPTY_PASSWORD: 'yes'
+
+networks:
+  huron-network:
+
+
+volumes:
+  mongo-data:
