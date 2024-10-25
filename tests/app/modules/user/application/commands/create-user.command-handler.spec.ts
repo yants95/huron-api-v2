@@ -17,12 +17,14 @@ const makeSut = (): Sut => {
 
 describe("CreateUserCommandHandler", () => {
   it("shoud be able to create user successfully", async () => {
-    const { sut } = makeSut();
+    const { sut, usersRepository } = makeSut();
     const command = new CreateUserCommandBuilder().build();
 
     const result = await sut.execute(command);
 
+    const persistedUser = await usersRepository.findByEmail(command.email);
     expect(result.isRight()).toBeTruthy();
+    expect(persistedUser).toBeDefined();
   });
 
   it("shoud throw UserAlreadyExistsError when creating user that already exists", async () => {
