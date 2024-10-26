@@ -20,10 +20,15 @@ export interface CreateUserProps {
 export interface UserProps {
   name: string;
   email: string;
+  password: string;
+  type: UserType;
+  status: UserStatus;
   createdAt: Date;
   firstAccessAt: Date | null;
   updatedAt: Date | null;
 }
+
+export type RestoreUserProps = ConstructorProperties;
 
 export class User extends Entity<UserProps> {
   protected entityId!: UserId;
@@ -40,10 +45,16 @@ export class User extends Entity<UserProps> {
         ...props,
         createdAt: new Date(),
         updatedAt: null,
-        firstAccessAt: null
+        firstAccessAt: null,
+        type: UserType.admin,
+        status: UserStatus.enabled
       }
     };
 
     return new User(createUserProps);
+  }
+
+  public static restore(props: RestoreUserProps): User {
+    return new User(props);
   }
 }
