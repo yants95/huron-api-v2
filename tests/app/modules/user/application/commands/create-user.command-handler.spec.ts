@@ -1,11 +1,13 @@
+import { CreateAdminBuilder } from "!tests/app/modules/user/builders/create-admin.builder";
 import { CreateUserCommandBuilder } from "!tests/app/modules/user/builders/create-user-command.builder";
 import { CreateUserBuilder } from "!tests/app/modules/user/builders/create-user.builder";
 import { InMemoryUserRepository } from "!tests/app/modules/user/doubles/in-memory-user-repository";
-import { CreateUserCommandHandler } from "#/modules/user/application/cqrs/commands/create-user.command-handler"
+import { CreateUserCommandHandler } from "#/modules/user/application/cqrs/commands/create-user.command-handler";
+
 
 interface Sut {
   sut: CreateUserCommandHandler;
-  usersRepository: InMemoryUserRepository
+  usersRepository: InMemoryUserRepository;
 }
 
 const makeSut = (): Sut => {
@@ -16,22 +18,25 @@ const makeSut = (): Sut => {
 }
 
 describe("CreateUserCommandHandler", () => {
-  it("shoud be able to create user successfully", async () => {
-    const { sut, usersRepository } = makeSut();
-    const command = new CreateUserCommandBuilder().build();
+  it.each([new CreateAdminBuilder().build()])
+    ("shoud be able to create user successfully with aggregates successfully", async (aggregate) => {
+      const { sut, usersRepository } = makeSut();
+      const command = new CreateUserCommandBuilder()
+        .with("admin", aggregate)
+        .build();
 
-    const result = await sut.execute(command);
+      const result = await sut.execute(command);
 
-    const persistedUser = await usersRepository.findByEmail(command.email);
-    expect(result.isRight()).toBeTruthy();
-    expect(persistedUser).toBeDefined();
-  });
+      const persistedUser = await usersRepository.findByEmail(command.email);
+      expect(result.isRight()).toBeTruthy();
+      expect(persistedUser).toBeDefined();
+    });
 
   it("shoud throw UserAlreadyExistsError when creating user that already exists", async () => {
     const { sut, usersRepository } = makeSut();
     const user = new CreateUserBuilder().build();
     const command = new CreateUserCommandBuilder()
-      .withEmail(user.getPropsCopy().email)
+      .with("email", user.getPropsCopy().email)
       .build();
     usersRepository.items.push(user);
 
