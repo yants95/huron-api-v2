@@ -13,8 +13,6 @@ export interface CreateUserProps {
   name: string;
   email: string;
   password: string;
-  type: UserType;
-  status: UserStatus;
 }
 
 export interface UserProps {
@@ -25,7 +23,7 @@ export interface UserProps {
   status: UserStatus;
   createdAt: Date;
   firstAccessAt: Date | null;
-  updatedAt: Date | null;
+  updatedAt?: Date;
 }
 
 export type RestoreUserProps = ConstructorProperties;
@@ -44,7 +42,7 @@ export class User extends Entity<UserProps> {
       props: {
         ...props,
         createdAt: new Date(),
-        updatedAt: null,
+
         firstAccessAt: null,
         type: UserType.admin,
         status: UserStatus.enabled

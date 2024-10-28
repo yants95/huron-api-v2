@@ -11,7 +11,7 @@ export const userSchema = z.object({
   status: z.nativeEnum(UserStatus),
   createdAt: z.coerce.date(),
   firstAccessAt: z.coerce.date().nullable(),
-  updatedAt: z.coerce.date().nullable()
+  updatedAt: z.coerce.date().optional()
 });
 
 export type UserModel = z.TypeOf<typeof userSchema>;

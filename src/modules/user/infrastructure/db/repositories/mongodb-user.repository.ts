@@ -3,6 +3,7 @@ import { MongoRepository } from "#/core/infrastructure/db/mongodb/mongodb-reposi
 import { User } from "#/modules/user/domain/entities/user";
 import { UserRepository } from "#/modules/user/domain/repositories/user.repository";
 import { MongoDBUserModel } from "#/modules/user/infrastructure/db/models/mongodb/mongodb-user.model";
+import { UserModel } from "#/modules/user/infrastructure/db/models/user.model";
 import { UserMapperSymbol } from "#/modules/user/infrastructure/di/user.di-token";
 import { Inject, Injectable } from "@nestjs/common";
 import { InjectConnection, InjectModel } from "@nestjs/mongoose";
@@ -15,7 +16,7 @@ export class MongoDBUserRepository
 {
   constructor(
     @Inject(UserMapperSymbol)
-    protected readonly mapper: Mapper<User, MongoDBUserModel>,
+    protected readonly mapper: Mapper<User, UserModel>,
     @InjectModel(MongoDBUserModel.name)
     private readonly userModel: Model<MongoDBUserModel>,
     @InjectConnection() connection: Connection,

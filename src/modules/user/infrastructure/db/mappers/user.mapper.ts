@@ -7,6 +7,7 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class UserMapper implements Mapper<User, UserModel> {
   public toPersist(entity: User): UserModel {
+    console.log("USER ENTITY", entity);
     const user = entity.getPropsCopy();
     const data: UserModel = {
       id: user.id.toString(),

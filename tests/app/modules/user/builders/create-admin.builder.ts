@@ -7,7 +7,7 @@ import { cpf } from "cpf-cnpj-validator";
 export class CreateAdminBuilder {
   #props: CreateAdminProps = {
     userId: UserId.create(Ulid.new()),
-    cpf: cpf.generate()
+    document: cpf.generate()
   }
 
   public build(): Admin {
