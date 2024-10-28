@@ -22,10 +22,7 @@ export class MongoDBUserModel extends MongoSchema implements UserModel {
   public status!: UserStatus;
 
   @Prop({ required: false, type: Date, default: null })
-  public readonly firstAccessAt!: Date;
-
-  @Prop({ required: false, type: Date, default: null })
-  public readonly updatedAt!: Date;
+  public readonly firstAccessAt!: Date | null;
 }
 
 export const MongoDBUserModelSchema = SchemaFactory.createForClass(MongoDBUserModel);

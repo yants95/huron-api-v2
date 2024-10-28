@@ -1,8 +1,9 @@
 import { CreateAdminBuilder } from "!tests/app/modules/user/builders/create-admin.builder";
 import { CreateUserCommandBuilder } from "!tests/app/modules/user/builders/create-user-command.builder";
 import { CreateUserBuilder } from "!tests/app/modules/user/builders/create-user.builder";
+import { CreateUserMediatorStub } from "!tests/app/modules/user/doubles/create-user-mediator.stub";
 import { InMemoryUserRepository } from "!tests/app/modules/user/doubles/in-memory-user-repository";
-import { CreateUserCommandHandler } from "#/modules/user/application/cqrs/commands/create-user.command-handler";
+import { CreateUserCommandHandler } from "#/modules/user/application/cqrs/commands/create-user/create-user.command-handler";
 
 
 interface Sut {
@@ -12,7 +13,8 @@ interface Sut {
 
 const makeSut = (): Sut => {
   const usersRepository = new InMemoryUserRepository();
-  const sut = new CreateUserCommandHandler(usersRepository);
+  const mediator = new CreateUserMediatorStub();
+  const sut = new CreateUserCommandHandler(usersRepository, mediator);
 
   return { sut, usersRepository };
 }
@@ -27,7 +29,7 @@ describe("CreateUserCommandHandler", () => {
 
       const result = await sut.execute(command);
 
-      const persistedUser = await usersRepository.findByEmail(command.email);
+      const persistedUser = await usersRepository.findByEmail(command.props.email);
       expect(result.isRight()).toBeTruthy();
       expect(persistedUser).toBeDefined();
     });

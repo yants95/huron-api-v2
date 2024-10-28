@@ -1,5 +1,6 @@
-import { CreateAdminCommandHandler } from "#/modules/user/application/cqrs/commands/create-admin.command-handler";
-import { CreateUserCommandHandler } from "#/modules/user/application/cqrs/commands/create-user.command-handler";
+import { CreateAdminCommandHandler } from "#/modules/user/application/cqrs/commands/create-admin/create-admin.command-handler";
+import { CreateUserCommandHandler } from "#/modules/user/application/cqrs/commands/create-user/create-user.command-handler";
+import { MongoDBAdminModel, MongoDBAdminModelSchema } from "#/modules/user/infrastructure/db/models/mongodb/mongodb-admin.model";
 import { MongoDBUserModel, MongoDBUserModelSchema } from "#/modules/user/infrastructure/db/models/mongodb/mongodb-user.model";
 import { userProviders } from "#/modules/user/infrastructure/di/user.provider";
 import { CreateUserController } from "#/modules/user/infrastructure/http/controllers/create-user.controller";
@@ -12,6 +13,10 @@ import { MongooseModule } from "@nestjs/mongoose";
       {
         name: MongoDBUserModel.name,
         schema: MongoDBUserModelSchema
+      },
+      {
+        name: MongoDBAdminModel.name,
+        schema: MongoDBAdminModelSchema
       }
     ])
   ],

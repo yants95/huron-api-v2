@@ -10,13 +10,17 @@ interface ConstructorProperties {
 
 export interface CreateAdminProps {
   userId: UserId;
-  cpf: string
+  document: string
 }
 
 export interface AdminProps {
   userId: UserId;
-  cpf: string;
+  document: string;
+  createdAt: Date;
+  updatedAt?: Date;
 }
+
+export type RestoreAdminProps = ConstructorProperties;
 
 export class Admin extends Entity<AdminProps> {
   private constructor({ id, props }: ConstructorProperties) {
@@ -26,17 +30,24 @@ export class Admin extends Entity<AdminProps> {
   public static create(props: CreateAdminProps): Admin {
     const createAdminProps: ConstructorProperties = {
       id: AdminId.create(Ulid.new()),
-      props
+      props: {
+        ...props,
+        createdAt: new Date()
+      }
     };
 
     return new Admin(createAdminProps);
+  }
+
+  public static restore(props: RestoreAdminProps): Admin {
+    return new Admin(props);
   }
 
   public getUserId(): UserId {
     return this.props.userId;
   }
 
-  public getCpf(): string {
-    return this.props.cpf;
+  public getDocument(): string {
+    return this.props.document;
   }
 }

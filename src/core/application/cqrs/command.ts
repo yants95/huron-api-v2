@@ -3,5 +3,6 @@ export class Command {
 }
 
 export enum CommandType {
+  user = "user",
   admin = "admin",
 }
