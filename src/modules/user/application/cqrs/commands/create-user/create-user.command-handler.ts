@@ -10,9 +10,10 @@ import { Mediator } from "#/core/application/interfaces/mediator";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CreateAdminCommand } from "#/modules/user/application/cqrs/commands/create-admin/create-admin.command";
 import { UserId } from "#/modules/user/domain/value-objects/user-id";
+import { CreateDoctorCommand } from "#/modules/user/application/cqrs/commands/create-doctor/create-doctor.command";
 
 type CommandErrors = UserAlreadyExistsError;
-type CommandResult = Either<CommandErrors, { userId: string }>;
+type CommandResult = Either<CommandErrors, void>;
 
 @Injectable()
 @CommandHandler(CreateUserCommand)
@@ -39,6 +40,14 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
       await this.mediator.mediate(admin);
     }
 
-    return right({ userId: user.id.toString() });
+    if (command.props.doctor) {
+      const admin = new CreateDoctorCommand({
+        userId: UserId.create(user.id.toString()),
+        ...command.props.doctor
+      });
+      await this.mediator.mediate(admin);
+    }
+
+    return right(undefined);
   }
 }
