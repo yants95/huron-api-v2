@@ -3,6 +3,7 @@ import { IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validato
 import { ApiProperty } from "@nestjs/swagger";
 import { AdminSchema } from "#/modules/user/infrastructure/http/controllers/schemas/create-admin.schema";
 import { CreateUserCommand } from "#/modules/user/application/cqrs/commands/create-user/create-user.command";
+import { DoctorSchema } from "#/modules/user/infrastructure/http/controllers/schemas/create-doctor.schema";
 
 export class CreateUserRequest {
   @IsNotEmpty()
@@ -28,12 +29,21 @@ export class CreateUserRequest {
   })
   public admin?: AdminSchema;
 
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DoctorSchema)
+  @ApiProperty({
+    type: DoctorSchema,
+  })
+  public doctor?: DoctorSchema;
+
   public toCommand(): CreateUserCommand {
     return new CreateUserCommand({
       name: this.name,
       email: this.email,
       password: this.password,
-      admin: this.admin
+      admin: this.admin,
+      doctor: this.doctor
     });
   }
 }
