@@ -1,7 +1,7 @@
 import { Entity } from "#/core/domain/entities/entity";
 import { Ulid } from "#/core/domain/value-objects/ulid";
-import { UserType } from "#/modules/user/domain/enum/user-type";
 import { UserStatus } from "#/modules/user/domain/enum/user-status";
+import { UserType } from "#/modules/user/domain/enum/user-type";
 import { UserId } from "#/modules/user/domain/value-objects/user-id";
 
 interface ConstructorProperties {
@@ -13,14 +13,15 @@ export interface CreateUserProps {
   name: string;
   email: string;
   password: string;
+  type: UserType;
 }
 
 export interface UserProps {
   name: string;
   email: string;
   password: string;
-  type: UserType;
   status: UserStatus;
+  type: UserType;
   createdAt: Date;
   firstAccessAt: Date | null;
   updatedAt?: Date;
@@ -42,9 +43,7 @@ export class User extends Entity<UserProps> {
       props: {
         ...props,
         createdAt: new Date(),
-
         firstAccessAt: null,
-        type: UserType.admin,
         status: UserStatus.enabled
       }
     };
