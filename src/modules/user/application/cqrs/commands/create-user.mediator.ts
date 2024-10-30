@@ -1,11 +1,11 @@
 import { Either, left, right } from "#/core/types/either";
 
-import { CommandType } from "#/core/application/cqrs/command";
 import { Mediator, MediatorHandler } from "#/core/application/interfaces/mediator";
 import { Inject, Injectable } from "@nestjs/common";
 import { CommandHandlersSymbol } from "#/modules/user/infrastructure/di/user.di-token";
 import { HandlerNotFoundError } from "#/modules/user/application/errors/handler-not-found.error";
 import { CreateUserMediatorCommand } from "#/modules/user/application/cqrs/commands/create-user-mediator.command";
+import { UserType } from "#/modules/user/domain/enum/user-type";
 
 type MediatorErrors = HandlerNotFoundError;
 export type CreateUserMediatorResult = Either<MediatorErrors, void>;
@@ -14,7 +14,7 @@ export type CreateUserMediatorResult = Either<MediatorErrors, void>;
 export class CreateUserMediator implements Mediator {
   public constructor(
     @Inject(CommandHandlersSymbol)
-    private readonly handlers: Map<CommandType, MediatorHandler>
+    private readonly handlers: Map<UserType, MediatorHandler>
   ) {}
 
   async mediate(command: CreateUserMediatorCommand): Promise<CreateUserMediatorResult> {

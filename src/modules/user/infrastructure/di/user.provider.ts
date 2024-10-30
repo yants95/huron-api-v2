@@ -1,14 +1,17 @@
 import { InMemoryUserRepository } from "!tests/app/modules/user/doubles/in-memory-user-repository";
-import { CommandType } from "#/core/application/cqrs/command";
 import { CreateAdminCommandHandler } from "#/modules/user/application/cqrs/commands/create-admin/create-admin.command-handler";
 import { CreateDoctorCommandHandler } from "#/modules/user/application/cqrs/commands/create-doctor/create-doctor.command-handler";
+import { CreateSecretaryCommandHandler } from "#/modules/user/application/cqrs/commands/create-secretary/create-secretary.command-handler";
 import { CreateUserMediator } from "#/modules/user/application/cqrs/commands/create-user.mediator";
 import { CreateUserCommandHandler } from "#/modules/user/application/cqrs/commands/create-user/create-user.command-handler";
+import { UserType } from "#/modules/user/domain/enum/user-type";
 import { AdminMapper } from "#/modules/user/infrastructure/db/mappers/admin.mapper";
 import { DoctorMapper } from "#/modules/user/infrastructure/db/mappers/doctor.mapper";
+import { SecretaryMapper } from "#/modules/user/infrastructure/db/mappers/secretary.mapper";
 import { UserMapper } from "#/modules/user/infrastructure/db/mappers/user.mapper";
 import { MongoDBAdminRepository } from "#/modules/user/infrastructure/db/repositories/mongodb-admin.repository";
 import { MongoDBDoctorRepository } from "#/modules/user/infrastructure/db/repositories/mongodb-doctor.repository";
+import { MongoDBSecretaryRepository } from "#/modules/user/infrastructure/db/repositories/mongodb-secretary.repository";
 import { MongoDBUserRepository } from "#/modules/user/infrastructure/db/repositories/mongodb-user.repository";
 import * as UserSymbols from "#/modules/user/infrastructure/di/user.di-token";
 import { Provider } from "@nestjs/common";
@@ -48,19 +51,31 @@ export const DoctorMapperProvider: Provider = {
   useClass: DoctorMapper
 };
 
-type UserHandlers = CreateAdminCommandHandler | CreateDoctorCommandHandler;
+export const SecretaryRepositoryProvider: Provider = {
+  provide: UserSymbols.SecretaryRepositorySymbol,
+  useClass: MongoDBSecretaryRepository
+};
+
+export const SecretaryMapperProvider: Provider = {
+  provide: UserSymbols.SecretaryMapperSymbol,
+  useClass: SecretaryMapper
+};
+
+type UserHandlers = CreateAdminCommandHandler | CreateDoctorCommandHandler | CreateSecretaryCommandHandler;
 
 export const CommandHandlersProvider: Provider = {
   provide: UserSymbols.CommandHandlersSymbol,
   useFactory: (
     adminHandler: CreateAdminCommandHandler,
-    doctorHandler: CreateDoctorCommandHandler
+    doctorHandler: CreateDoctorCommandHandler,
+    secretaryHandler: CreateSecretaryCommandHandler
   ) =>
-    new Map<CommandType, UserHandlers>([
-      [CommandType.admin, adminHandler],
-      [CommandType.doctor, doctorHandler],
+    new Map<UserType, UserHandlers>([
+      [UserType.admin, adminHandler],
+      [UserType.doctor, doctorHandler],
+      [UserType.secretary, secretaryHandler],
     ]),
-  inject: [CreateAdminCommandHandler, CreateDoctorCommandHandler]
+  inject: [CreateAdminCommandHandler, CreateDoctorCommandHandler, CreateSecretaryCommandHandler]
 };
 
 export const userProviders: Provider[] = [
@@ -71,5 +86,7 @@ export const userProviders: Provider[] = [
   AdminRepositoryProvider,
   AdminMapperProvider,
   DoctorRepositoryProvider,
-  DoctorMapperProvider
+  DoctorMapperProvider,
+  SecretaryRepositoryProvider,
+  SecretaryMapperProvider
 ]

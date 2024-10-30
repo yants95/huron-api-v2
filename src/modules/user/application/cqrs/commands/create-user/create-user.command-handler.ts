@@ -11,6 +11,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CreateAdminCommand } from "#/modules/user/application/cqrs/commands/create-admin/create-admin.command";
 import { UserId } from "#/modules/user/domain/value-objects/user-id";
 import { CreateDoctorCommand } from "#/modules/user/application/cqrs/commands/create-doctor/create-doctor.command";
+import { CreateSecretaryCommand } from "#/modules/user/application/cqrs/commands/create-secretary/create-secretary.command";
 
 type CommandErrors = UserAlreadyExistsError;
 type CommandResult = Either<CommandErrors, void>;
@@ -32,7 +33,7 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
     const user = User.create(command.props);
     await this.usersRepository.insert(user);
     
-    if (command.props.admin) {
+    if (command.props?.admin) {
       const admin = new CreateAdminCommand({
         userId: UserId.create(user.id.toString()),
         ...command.props.admin
@@ -40,12 +41,20 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
       await this.mediator.mediate(admin);
     }
 
-    if (command.props.doctor) {
+    if (command.props?.doctor) {
       const admin = new CreateDoctorCommand({
         userId: UserId.create(user.id.toString()),
         ...command.props.doctor
       });
       await this.mediator.mediate(admin);
+    }
+
+    if (command.props?.secretary) {
+      const secretary = new CreateSecretaryCommand({
+        userId: UserId.create(user.id.toString()),
+        ...command.props.secretary
+      });
+      await this.mediator.mediate(secretary);
     }
 
     return right(undefined);

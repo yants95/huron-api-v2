@@ -1,9 +1,5 @@
-export class Command {
-  type: CommandType;
-}
+import { UserType } from "#/modules/user/domain/enum/user-type";
 
-export enum CommandType {
-  user = "user",
-  admin = "admin",
-  doctor = "doctor",
+export class Command {
+  type: UserType;
 }

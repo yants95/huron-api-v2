@@ -1,5 +1,6 @@
 import { CreateAdminBuilder } from "!tests/app/modules/user/builders/create-admin.builder";
 import { CreateDoctorBuilder } from "!tests/app/modules/user/builders/create-doctor.builder";
+import { CreateSecretaryBuilder } from "!tests/app/modules/user/builders/create-secretary.builder";
 import { CreateUserCommandBuilder } from "!tests/app/modules/user/builders/create-user-command.builder";
 import { CreateUserBuilder } from "!tests/app/modules/user/builders/create-user.builder";
 import { CreateUserMediatorStub } from "!tests/app/modules/user/doubles/create-user-mediator.stub";
@@ -20,12 +21,13 @@ const makeSut = (): Sut => {
 }
 
 describe("CreateUserCommandHandler", () => {
-  it.each([new CreateAdminBuilder().build(), new CreateDoctorBuilder().build()])
+  it.each([new CreateAdminBuilder().build(), new CreateDoctorBuilder().build(), new CreateSecretaryBuilder().build()])
     ("shoud be able to create user successfully with aggregates successfully", async (aggregate) => {
       const { sut, usersRepository } = makeSut();
       const command = new CreateUserCommandBuilder()
         .with("admin", aggregate)
         .with("doctor", aggregate)
+        .with("secretary", aggregate)
         .build();
 
       const result = await sut.execute(command);

@@ -1,8 +1,8 @@
 import { CreateAdminCommandHandlerStub } from "!tests/app/modules/user/doubles/create-admin-command-handler.stub";
 import { CreateDoctorCommandHandlerStub } from "!tests/app/modules/user/doubles/create-doctor-command-handler.stub";
-import { CommandType } from "#/core/application/cqrs/command";
 import { MediatorHandler } from "#/core/application/interfaces/mediator";
 import { CreateUserMediator, CreateUserMediatorResult } from "#/modules/user/application/cqrs/commands/create-user.mediator";
+import { UserType } from "#/modules/user/domain/enum/user-type";
 
 type CreateUserMediatorStubResponse = CreateUserMediatorResult;
 
@@ -14,9 +14,9 @@ export class CreateUserMediatorStub extends CreateUserMediator {
     const doctorHandler = new CreateDoctorCommandHandlerStub();
 
     super(
-      new Map<CommandType, MediatorHandler>([
-        [CommandType.admin, adminHandler],
-        [CommandType.doctor, doctorHandler],
+      new Map<UserType, MediatorHandler>([
+        [UserType.admin, adminHandler],
+        [UserType.doctor, doctorHandler],
       ]),
     );
   }

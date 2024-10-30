@@ -6,3 +6,5 @@ export const CreateUserMediatorSymbol = Symbol("CREATE_USER_MEDIATOR_SYMBOL");
 export const CommandHandlersSymbol = Symbol("COMMAND_HANDLERS_SYMBOL");
 export const DoctorRepositorySymbol = Symbol("DOCTOR_REPOSITORY_SYMBOL");
 export const DoctorMapperSymbol = Symbol("DOCTOR_MAPPER_SYMBOL");
+export const SecretaryRepositorySymbol = Symbol("SECRETARY_REPOSITORY_SYMBOL");
+export const SecretaryMapperSymbol = Symbol("SECRETARY_MAPPER_SYMBOL");

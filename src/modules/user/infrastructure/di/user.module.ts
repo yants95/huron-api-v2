@@ -1,8 +1,10 @@
 import { CreateAdminCommandHandler } from "#/modules/user/application/cqrs/commands/create-admin/create-admin.command-handler";
 import { CreateDoctorCommandHandler } from "#/modules/user/application/cqrs/commands/create-doctor/create-doctor.command-handler";
+import { CreateSecretaryCommandHandler } from "#/modules/user/application/cqrs/commands/create-secretary/create-secretary.command-handler";
 import { CreateUserCommandHandler } from "#/modules/user/application/cqrs/commands/create-user/create-user.command-handler";
 import { MongoDBAdminModel, MongoDBAdminModelSchema } from "#/modules/user/infrastructure/db/models/mongodb/mongodb-admin.model";
 import { MongoDBDoctorModel, MongoDBDoctorModelSchema } from "#/modules/user/infrastructure/db/models/mongodb/mongodb-doctor.model";
+import { MongoDBSecretaryModel, MongoDBSecretaryModelSchema } from "#/modules/user/infrastructure/db/models/mongodb/mongodb-secretary.model";
 import { MongoDBUserModel, MongoDBUserModelSchema } from "#/modules/user/infrastructure/db/models/mongodb/mongodb-user.model";
 import { userProviders } from "#/modules/user/infrastructure/di/user.provider";
 import { CreateUserController } from "#/modules/user/infrastructure/http/controllers/create-user.controller";
@@ -23,6 +25,10 @@ import { MongooseModule } from "@nestjs/mongoose";
       {
         name: MongoDBDoctorModel.name,
         schema: MongoDBDoctorModelSchema
+      },
+      {
+        name: MongoDBSecretaryModel.name,
+        schema: MongoDBSecretaryModelSchema
       }
     ])
   ],
@@ -31,7 +37,8 @@ import { MongooseModule } from "@nestjs/mongoose";
     ...userProviders,
     CreateUserCommandHandler,
     CreateAdminCommandHandler,
-    CreateDoctorCommandHandler
+    CreateDoctorCommandHandler,
+    CreateSecretaryCommandHandler
   ],
   exports: [...userProviders]
 })
