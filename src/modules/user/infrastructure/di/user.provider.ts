@@ -1,9 +1,7 @@
-import { InMemoryUserRepository } from "!tests/app/modules/user/doubles/in-memory-user-repository";
 import { CreateAdminCommandHandler } from "#/modules/user/application/cqrs/commands/create-admin/create-admin.command-handler";
 import { CreateDoctorCommandHandler } from "#/modules/user/application/cqrs/commands/create-doctor/create-doctor.command-handler";
 import { CreateSecretaryCommandHandler } from "#/modules/user/application/cqrs/commands/create-secretary/create-secretary.command-handler";
 import { CreateUserMediator } from "#/modules/user/application/cqrs/commands/create-user.mediator";
-import { CreateUserCommandHandler } from "#/modules/user/application/cqrs/commands/create-user/create-user.command-handler";
 import { UserType } from "#/modules/user/domain/enum/user-type";
 import { AdminMapper } from "#/modules/user/infrastructure/db/mappers/admin.mapper";
 import { DoctorMapper } from "#/modules/user/infrastructure/db/mappers/doctor.mapper";

@@ -3,4 +3,6 @@ import { Admin } from "#/modules/user/domain/entities/admin";
 
 export abstract class AdminRepository extends Repository<Admin> {
   public abstract insert(entity: Admin): Promise<void>;
+
+  public abstract findByDocument(document: string): Promise<Admin | null>;
 }
