@@ -19,7 +19,8 @@ export abstract class MongoRepository<
 
   public async insert(model: DomainEntity): Promise<void> {
     const record = this.mapper.toPersist(model);
-    await this.schema.create(record);
+    const schema = new this.schema(record);
+    await schema.save({ session: this.transactionSession });
   }
 
   public async update(entity: DomainEntity): Promise<void> {

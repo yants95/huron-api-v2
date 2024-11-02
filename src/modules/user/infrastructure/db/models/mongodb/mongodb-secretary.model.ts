@@ -4,7 +4,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 @Schema({ collection: "secretaries" })
 export class MongoDBSecretaryModel extends MongoSchema implements SecretaryModel {
-  @Prop({ type: String, default: null, required: false })
+  @Prop({ type: String, default: null, required: true })
   public userId!: string;
 
   @Prop({ type: String, required: true })

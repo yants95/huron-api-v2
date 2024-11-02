@@ -8,12 +8,12 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class SecretaryMapper implements Mapper<Secretary, SecretaryModel> {
   public toPersist(entity: Secretary): SecretaryModel {
-    const admin = entity.getPropsCopy();
+    const secretary = entity.getPropsCopy();
     const data: SecretaryModel = {
-      id: admin.id.toString(),
-      userId: admin.userId.toString(),
-      document: admin.document,
-      createdAt: admin.createdAt
+      id: secretary.id.toString(),
+      userId: secretary.userId.toString(),
+      document: secretary.document,
+      createdAt: secretary.createdAt
     };
     secretarySchema.parse(data);
     return data;

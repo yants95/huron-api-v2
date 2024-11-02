@@ -23,4 +23,16 @@ export class MongoDBDoctorRepository
   ) {
     super(mapper, doctorModel, connection);
   }
+
+  public async findByDocument(document: string): Promise<Doctor | null> {
+    const doctor = await this.doctorModel.findOne({ document });
+    if (!doctor) return null;
+    return this.mapper.toDomain(doctor);
+  }
+
+  public async findByCRM(crm: string): Promise<Doctor | null> {
+    const doctor = await this.doctorModel.findOne({ crm });
+    if (!doctor) return null;
+    return this.mapper.toDomain(doctor);
+  }
 }

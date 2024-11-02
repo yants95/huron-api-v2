@@ -24,29 +24,31 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
     @Inject(UserRepositorySymbol)
     private readonly usersRepository: UserRepository,
     @Inject(CreateUserMediatorSymbol)
-    private readonly mediator: Mediator
+    private readonly mediator: Mediator,
   ) {}
 
   async execute(command: CreateUserCommand): Promise<CommandResult> {
     const userExists = await this.usersRepository.findByEmail(command.props.email);
     if (userExists) return left(UserAlreadyExistsError.create());
+    
     const user = User.create(command.props);
-    await this.usersRepository.insert(user);
     
     if (command.props?.admin) {
       const admin = new CreateAdminCommand({
         userId: UserId.create(user.id.toString()),
         ...command.props.admin
       });
-      await this.mediator.mediate(admin);
+      const adminResponse = await this.mediator.mediate(admin);
+      if (adminResponse.isLeft()) return left(adminResponse.value);
     }
 
     if (command.props?.doctor) {
-      const admin = new CreateDoctorCommand({
+      const doctor = new CreateDoctorCommand({
         userId: UserId.create(user.id.toString()),
         ...command.props.doctor
       });
-      await this.mediator.mediate(admin);
+      const doctorResponse = await this.mediator.mediate(doctor);
+      if (doctorResponse.isLeft()) return left(doctorResponse.value);
     }
 
     if (command.props?.secretary) {
@@ -54,8 +56,11 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
         userId: UserId.create(user.id.toString()),
         ...command.props.secretary
       });
-      await this.mediator.mediate(secretary);
+      const secretaryResponse = await this.mediator.mediate(secretary);
+      if (secretaryResponse.isLeft()) return left(secretaryResponse.value);
     }
+
+    await this.usersRepository.insert(user);
 
     return right(undefined);
   }
