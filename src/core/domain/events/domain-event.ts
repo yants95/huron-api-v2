@@ -1,8 +1,9 @@
 import { ulid } from "ulidx";
 
-export abstract class DomainEvent {
+export abstract class DomainEvent<T = unknown> {
   private id: string;
   private timestamp: number;
+  private data: T;
 
   public constructor() {
     this.id = ulid();
@@ -10,6 +11,10 @@ export abstract class DomainEvent {
   }
 
   abstract getName(): string;
+
+  public getData(): T {
+    return this.data;
+  }
 
   getTimestamp(): number {
     return this.timestamp;

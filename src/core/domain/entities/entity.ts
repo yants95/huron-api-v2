@@ -1,16 +1,19 @@
+import { EntityId } from "#/core/domain/entities/entity-id";
+import { convertPropsToObject } from "#/core/domain/value-objects/utils/convert-props-to-object";
+
 interface BaseEntityProps {
-  id: string;
+  id: EntityId;
 }
 
 interface CreateEntityProps<T> {
-  id: string;
+  id: EntityId;
   props: T;
 }
 
 export abstract class Entity<EntityProps> {
   protected readonly props!: EntityProps;
 
-  readonly id: string;
+  readonly id: EntityId;
 
   protected constructor({ id, props }: CreateEntityProps<EntityProps>) {
     this.props = props;
@@ -28,5 +31,16 @@ export abstract class Entity<EntityProps> {
     };
 
     return Object.freeze(propsCopy);
+  }
+
+  public toObject(): Readonly<{ id: EntityId; } & EntityProps> {
+    const plainProps = convertPropsToObject(this.props);
+
+    const result = {
+      id: this.id,
+      ...plainProps,
+    };
+
+    return Object.freeze(result);
   }
 }
