@@ -32,7 +32,7 @@ describe("CreateUserCommandHandler", () => {
 
       const result = await sut.execute(command);
 
-      const persistedUser = await usersRepository.findByEmail(command.props.email);
+      const persistedUser = await usersRepository.findByEmail(command.email);
       expect(result.isRight()).toBeTruthy();
       expect(persistedUser).toBeDefined();
     });

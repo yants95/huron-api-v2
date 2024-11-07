@@ -1,16 +1,22 @@
-import { Command } from "#/core/application/cqrs/command";
+import { Command, CommandProps } from "#/core/application/cqrs/command";
 import { UserType } from "#/modules/user/domain/enum/user-type";
-import { UserId } from "#/modules/user/domain/value-objects/user-id";
 
-export interface DoctorCommandProps {
-  userId: UserId;
-  document: string;
-  crm: string;
-  specialty: string;
-}
-
-export class CreateDoctorCommand implements Command {
+export class CreateDoctorCommand extends Command {
   public readonly type = UserType.doctor;
 
-  public constructor(public props: DoctorCommandProps) {}
+  public readonly userId: string;
+
+  public readonly document: string;
+
+  public readonly crm: string;
+
+  public readonly specialty: string;
+
+  public constructor(props: CommandProps<CreateDoctorCommand>) {
+    super({ ...props });
+    this.userId = props.userId;
+    this.document = props.document;
+    this.crm = props.crm;
+    this.specialty = props.specialty;
+  }
 }

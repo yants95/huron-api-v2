@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { AdminSchema } from "#/modules/user/infrastructure/http/controllers/schemas/create-admin.schema";
 import { CreateUserCommand } from "#/modules/user/application/cqrs/commands/create-user/create-user.command";
@@ -24,7 +24,7 @@ export class CreateUserRequest {
   public password!: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsEnum(UserType)
   public type!: UserType;
 
   @IsOptional()
@@ -56,7 +56,6 @@ export class CreateUserRequest {
       name: this.name,
       email: this.email,
       password: this.password,
-      type: this.type,
       admin: this.admin,
       doctor: this.doctor,
       secretary: this.secretary

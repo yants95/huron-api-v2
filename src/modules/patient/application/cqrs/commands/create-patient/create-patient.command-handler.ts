@@ -19,7 +19,6 @@ export class CreatePatientCommandHandler implements ICommandHandler<CreatePatien
   ) {}
 
   async execute(command: CreatePatientCommand): Promise<CreatePatientCommandResult> {
-    console.log("COMMAND", command);
     const foundPatient = await this.patientsRepository.findByDocument(command.document);
     if (foundPatient) return left(PatientAlreadyExistsError.create());
     const patient = Patient.create(command);
