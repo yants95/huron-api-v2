@@ -1,14 +1,16 @@
-import { Command } from "#/core/application/cqrs/command";
+import { Command, CommandProps } from "#/core/application/cqrs/command";
 import { UserType } from "#/modules/user/domain/enum/user-type";
-import { UserId } from "#/modules/user/domain/value-objects/user-id";
 
-interface AdminCommandProps {
-  userId: UserId;
-  document: string;
-}
+export class CreateAdminCommand extends Command {
+  public readonly type = UserType.admin;
 
-export class CreateAdminCommand implements Command {
-  public type = UserType.admin;
+  public readonly userId: string;
+  
+  public readonly document: string;
 
-  public constructor(public props: AdminCommandProps) {}
+  public constructor(props: CommandProps<CreateAdminCommand>) {
+    super({ ...props });
+    this.userId = props.userId;
+    this.document = props.document;
+  }
 }

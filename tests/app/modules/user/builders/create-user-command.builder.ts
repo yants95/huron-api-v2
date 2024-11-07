@@ -1,19 +1,20 @@
-import { Builder } from "!tests/app/modules/user/builders/builder";
-import { CreateUserCommand, UserCommandProps } from "#/modules/user/application/cqrs/commands/create-user/create-user.command";
-import { UserType } from "#/modules/user/domain/enum/user-type";
+import { CreateUserCommand } from "#/modules/user/application/cqrs/commands/create-user/create-user.command";
+
 import { faker } from "@faker-js/faker";
 
-export class CreateUserCommandBuilder extends Builder<UserCommandProps> {
-  public constructor() {
-    super({
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      type: UserType.admin
-    });
+export class CreateUserCommandBuilder {
+  #props = {
+    name: faker.person.fullName(),
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  }
+
+  public with<T>(param: keyof CreateUserCommand, value: T): this {
+    this.#props[param] = value as never;
+    return this;
   }
 
   public build(): CreateUserCommand {
-    return new CreateUserCommand(this.getProps());
+    return new CreateUserCommand(this.#props);
   }
 }

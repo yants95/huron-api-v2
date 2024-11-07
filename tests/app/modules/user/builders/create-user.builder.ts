@@ -9,7 +9,6 @@ export class CreateUserBuilder extends Builder<CreateUserProps> {
       name: faker.person.fullName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      type: UserType.admin
     })
   }
 

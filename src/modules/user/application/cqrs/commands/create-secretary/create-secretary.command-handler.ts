@@ -7,6 +7,7 @@ import { CreateSecretaryCommand } from "#/modules/user/application/cqrs/commands
 import { SecretaryRepository } from "#/modules/user/domain/repositories/secretary.repository";
 import { MediatorHandler } from "#/core/application/interfaces/mediator";
 import { SecretaryAlreadyExistsError } from "#/modules/user/application/errors/secretary-already-exists.error";
+import { UserId } from "#/modules/user/domain/value-objects/user-id";
 
 export type CreateSecretaryCommandResult = Either<SecretaryAlreadyExistsError, void>;
 
@@ -18,9 +19,12 @@ export class CreateSecretaryCommandHandler implements MediatorHandler {
   ) {}
 
   async handle(command: CreateSecretaryCommand): Promise<CreateSecretaryCommandResult> {
-    const foundSecretary = await this.secretariesRepository.findByDocument(command.props.document);
+    const foundSecretary = await this.secretariesRepository.findByDocument(command.document);
     if (foundSecretary) return left(SecretaryAlreadyExistsError.create());
-    const secretary = Secretary.create(command.props);
+    const secretary = Secretary.create({
+      ...command,
+      userId: UserId.create(command.userId),
+    });
     await this.secretariesRepository.insert(secretary);
 
     return right(undefined);
