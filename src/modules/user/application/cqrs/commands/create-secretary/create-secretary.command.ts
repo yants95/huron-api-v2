@@ -1,14 +1,22 @@
-import { Command } from "#/core/application/cqrs/command";
+import { Command, CommandProps } from "#/core/application/cqrs/command";
 import { UserType } from "#/modules/user/domain/enum/user-type";
-import { UserId } from "#/modules/user/domain/value-objects/user-id";
 
-interface SecretaryCommandProps {
-  userId: UserId;
-  document: string;
-}
+export class CreateSecretaryCommand extends Command {
+  public readonly type = UserType.secretary;
 
-export class CreateSecretaryCommand implements Command {
-  public type = UserType.secretary;
+  public readonly userId: string;
 
-  public constructor(public props: SecretaryCommandProps) {}
+  public readonly document: string;
+
+  public constructor(props: CommandProps<CreateSecretaryCommand>) {
+    super(props);
+    this.userId = props.userId;
+    this.document = props.document;
+  }
+
+  public static getName(): string {
+    return "create_secretary.command";
+  }
+
+  public readonly getName = (): string => CreateSecretaryCommand.getName();
 }

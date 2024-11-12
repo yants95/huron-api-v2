@@ -13,7 +13,6 @@ export interface CreateUserProps {
   name: string;
   email: string;
   password: string;
-  type: UserType;
 }
 
 export interface UserProps {
@@ -21,7 +20,7 @@ export interface UserProps {
   email: string;
   password: string;
   status: UserStatus;
-  type: UserType;
+  type?: UserType;
   createdAt: Date;
   firstAccessAt: Date | null;
   updatedAt?: Date;
@@ -53,5 +52,13 @@ export class User extends Entity<UserProps> {
 
   public static restore(props: RestoreUserProps): User {
     return new User(props);
+  }
+
+  public setUserType(userType: UserType): void {
+    this.props.type = userType;
+  }
+
+  public getUserType(): UserType | undefined {
+    return this.props.type;
   }
 }

@@ -12,7 +12,7 @@ export class UserMapper implements Mapper<User, UserModel> {
       id: user.id.toString(),
       name: user.name,
       email: user.email,
-      type: user.type,
+      type: entity.getUserType(),
       status: user.status,
       password: user.password,
       createdAt: user.createdAt,

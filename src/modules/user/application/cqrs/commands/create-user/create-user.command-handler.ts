@@ -9,9 +9,9 @@ import { CreateUserMediatorSymbol, UserRepositorySymbol } from "#/modules/user/i
 import { Mediator } from "#/core/application/interfaces/mediator";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CreateAdminCommand } from "#/modules/user/application/cqrs/commands/create-admin/create-admin.command";
-import { UserId } from "#/modules/user/domain/value-objects/user-id";
 import { CreateDoctorCommand } from "#/modules/user/application/cqrs/commands/create-doctor/create-doctor.command";
 import { CreateSecretaryCommand } from "#/modules/user/application/cqrs/commands/create-secretary/create-secretary.command";
+import { UserType } from "#/modules/user/domain/enum/user-type";
 
 type CommandErrors = UserAlreadyExistsError;
 type CommandResult = Either<CommandErrors, void>;
@@ -28,34 +28,42 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
   ) {}
 
   async execute(command: CreateUserCommand): Promise<CommandResult> {
-    const userExists = await this.usersRepository.findByEmail(command.props.email);
+    const userExists = await this.usersRepository.findByEmail(command.email);
     if (userExists) return left(UserAlreadyExistsError.create());
+    const {
+      admin: adminCommand,
+      secretary: secretaryCommand,
+      doctor: doctorCommand
+    } = command;
     
-    const user = User.create(command.props);
+    const user = User.create(command);
     
-    if (command.props?.admin) {
+    if (adminCommand) {
       const admin = new CreateAdminCommand({
-        userId: UserId.create(user.id.toString()),
-        ...command.props.admin
+        userId: user.id.toString(),
+        ...adminCommand
       });
+      user.setUserType(UserType.admin);
       const adminResponse = await this.mediator.mediate(admin);
       if (adminResponse.isLeft()) return left(adminResponse.value);
     }
 
-    if (command.props?.doctor) {
+    if (doctorCommand) {
       const doctor = new CreateDoctorCommand({
-        userId: UserId.create(user.id.toString()),
-        ...command.props.doctor
+        userId: user.id.toString(),
+        ...doctorCommand
       });
+      user.setUserType(UserType.doctor);
       const doctorResponse = await this.mediator.mediate(doctor);
       if (doctorResponse.isLeft()) return left(doctorResponse.value);
     }
 
-    if (command.props?.secretary) {
+    if (secretaryCommand) {
       const secretary = new CreateSecretaryCommand({
-        userId: UserId.create(user.id.toString()),
-        ...command.props.secretary
+        userId: user.id.toString(),
+        ...secretaryCommand
       });
+      user.setUserType(UserType.secretary);
       const secretaryResponse = await this.mediator.mediate(secretary);
       if (secretaryResponse.isLeft()) return left(secretaryResponse.value);
     }

@@ -7,6 +7,7 @@ import { CreateAdminCommand } from "#/modules/user/application/cqrs/commands/cre
 import { AdminRepository } from "#/modules/user/domain/repositories/admin.repository";
 import { MediatorHandler } from "#/core/application/interfaces/mediator";
 import { AdminAlreadyExistsError } from "#/modules/user/application/errors/admin-already-exists.error";
+import { UserId } from "#/modules/user/domain/value-objects/user-id";
 
 export type CreateAdminCommandResult = Either<AdminAlreadyExistsError, void>;
 
@@ -18,9 +19,12 @@ export class CreateAdminCommandHandler implements MediatorHandler {
   ) {}
 
   async handle(command: CreateAdminCommand): Promise<CreateAdminCommandResult> {
-    const foundAdmin = await this.adminsRepository.findOne(command.props.document);
+    const foundAdmin = await this.adminsRepository.findOne(command.document);
     if (foundAdmin) return left(AdminAlreadyExistsError.create());
-    const admin = Admin.create(command.props);
+    const admin = Admin.create({
+      ...command,
+      userId: UserId.create(command.userId),
+    });
     await this.adminsRepository.insert(admin);
 
     return right(undefined);

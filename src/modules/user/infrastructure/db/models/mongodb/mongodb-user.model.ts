@@ -15,8 +15,8 @@ export class MongoDBUserModel extends MongoSchema implements UserModel {
   @Prop({ unique: true, type: String, required: true })
   public email!: string;
 
-  @Prop({ type: String, required: true })
-  public type!: UserType;
+  @Prop({ type: String })
+  public type?: UserType;
 
   @Prop({ type: String, default: null })
   public status!: UserStatus;

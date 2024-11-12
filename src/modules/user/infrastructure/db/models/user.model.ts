@@ -7,7 +7,7 @@ export const userSchema = z.object({
   name: z.string(),
   password: z.string(),
   email: z.string(),
-  type: z.nativeEnum(UserType),
+  type: z.nativeEnum(UserType).optional(),
   status: z.nativeEnum(UserStatus),
   createdAt: z.coerce.date(),
   firstAccessAt: z.coerce.date().nullable(),
