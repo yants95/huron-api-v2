@@ -16,5 +16,7 @@ export interface SchedulesFilterProps {
 export abstract class DoctorScheduleRepository extends Repository<DoctorSchedule> {
   public abstract insert(entity: DoctorSchedule): Promise<void>;
 
+  public abstract update(entity: DoctorSchedule): Promise<void>;
+
   public abstract findDoctorSchedule(filters: SchedulesFilterProps): Promise<DoctorSchedule[]>;
 }

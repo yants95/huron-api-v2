@@ -10,8 +10,8 @@ import {
 import { CommandBus } from "@nestjs/cqrs";
 import { ApiTags } from "@nestjs/swagger";
 
-@ApiTags("/schedules/doctor-schedules")
-@Controller({ path: "/schedules/doctor-schedules", version: "1" })
+@ApiTags("/doctor-schedules")
+@Controller({ path: "/doctor-schedules", version: "1" })
 export class CreateDoctorScheduleController extends HttpController {
   private static readonly mappedExceptions = [
     {

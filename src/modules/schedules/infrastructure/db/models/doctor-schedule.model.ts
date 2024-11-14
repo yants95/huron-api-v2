@@ -8,7 +8,8 @@ export const doctorScheduleSchema = z.object({
   time: z.string(),
   status: z.nativeEnum(DoctorScheduleStatus),
   createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date().optional()
+  updatedAt: z.coerce.date().optional(),
+  bookedAt: z.coerce.date().optional()
 });
 
 export type DoctorScheduleModel = z.TypeOf<typeof doctorScheduleSchema>;

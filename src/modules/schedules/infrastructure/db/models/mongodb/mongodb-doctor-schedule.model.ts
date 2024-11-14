@@ -16,6 +16,9 @@ export class MongoDBDoctorScheduleModel extends MongoSchema implements DoctorSch
 
   @Prop({ type: String, required: true })
   public status!: DoctorScheduleStatus;
+
+  @Prop({ type: Date })
+  public bookedAt?: Date;
 }
 
 export const MongoDBDoctorScheduleModelSchema = SchemaFactory.createForClass(MongoDBDoctorScheduleModel);

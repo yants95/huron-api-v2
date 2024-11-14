@@ -17,7 +17,8 @@ export class DoctorScheduleMapper implements Mapper<DoctorSchedule, DoctorSchedu
       time: doctorSchedule.time,
       status: doctorSchedule.status,
       createdAt: doctorSchedule.createdAt,
-      updatedAt: doctorSchedule.updatedAt
+      updatedAt: doctorSchedule.updatedAt,
+      bookedAt: doctorSchedule.bookedAt
     };
     doctorScheduleSchema.parse(data);
     return data;
@@ -32,7 +33,8 @@ export class DoctorScheduleMapper implements Mapper<DoctorSchedule, DoctorSchedu
         date: record.date,
         status: record.status as DoctorScheduleStatus,
         createdAt: record.createdAt,
-        updatedAt: record.updatedAt
+        updatedAt: record.updatedAt,
+        bookedAt: record.bookedAt
       },
     });
   }

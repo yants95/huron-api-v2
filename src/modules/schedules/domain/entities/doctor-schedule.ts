@@ -22,6 +22,7 @@ export interface DoctorScheduleProps {
   status: DoctorScheduleStatus;
   createdAt: Date;
   updatedAt?: Date;
+  bookedAt?: Date;
 }
 
 export type RestoreDoctorScheduleProps = ConstructorProperties;
@@ -61,5 +62,19 @@ export class DoctorSchedule extends Entity<DoctorScheduleProps> {
 
   public getTime(): string {
     return this.props.time;
+  }
+
+  public isUnavailable(): boolean {
+    return this.getStatus() === DoctorScheduleStatus.unavailable;
+  }
+
+  public getStatus(): DoctorScheduleStatus {
+    if (this.props.bookedAt) return DoctorScheduleStatus.unavailable;
+    return DoctorScheduleStatus.available;
+  }
+
+  public book(bookedAt: Date): void {
+    this.props.status = DoctorScheduleStatus.unavailable;
+    this.props.bookedAt = bookedAt;
   }
 }

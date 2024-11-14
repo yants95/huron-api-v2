@@ -53,4 +53,8 @@ export class Patient extends Entity<PatientProps> {
   public static restore(props: RestorePatientProps): Patient {
     return new Patient(props);
   }
+
+  public getName(): string {
+    return this.props.name;
+  }
 }
