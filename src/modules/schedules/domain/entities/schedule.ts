@@ -1,6 +1,7 @@
 import { Entity } from "#/core/domain/entities/entity";
 import { Ulid } from "#/core/domain/value-objects/ulid";
 import { PatientId } from "#/modules/patient/domain/value-objects/patient-id";
+import { ScheduleCreatedDomainEvent } from "#/modules/schedules/domain/events/schedule-created.domain-event";
 import { DoctorScheduleId } from "#/modules/schedules/domain/value-objects/doctor-schedule-id";
 import { ScheduleId } from "#/modules/schedules/domain/value-objects/schedule-id";
 import { DoctorId } from "#/modules/user/domain/value-objects/doctor-id";
@@ -42,8 +43,16 @@ export class Schedule extends Entity<ScheduleProps> {
         createdAt: new Date(),
       }
     };
+    const schedule = new Schedule(createScheduleProps);
+    schedule.addEvent(
+      new ScheduleCreatedDomainEvent({
+        patientId: props.patientId,
+        doctorId: props.doctorId,
+        doctorScheduleId: props.doctorScheduleId,
+      })
+    );
 
-    return new Schedule(createScheduleProps);
+    return schedule;
   }
 
   public static restore(props: RestoreScheduleProps): Schedule {

@@ -24,3 +24,15 @@ export class ScheduleBuilder extends Builder<ScheduleProps> {
   }
 }
 
+export class SchedulePropsBuilder {
+  #props: ScheduleProps = {
+    doctorId: DoctorId.create(Ulid.new()),
+    patientId: PatientId.create(Ulid.new()),
+    doctorScheduleId: DoctorScheduleId.create(Ulid.new()),
+    createdAt: new Date()
+  };
+
+  public build(): ScheduleProps {
+    return this.#props;
+  }
+}
