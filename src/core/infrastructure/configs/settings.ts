@@ -44,3 +44,8 @@ export function getEnvOrDefault<T extends object>(
 }
 
 export const DATABASE_URI = getEnvOrThrow("DATABASE_URI");
+
+// Google Calendar
+export const GOOGLE_CLIENT_ID = getEnvOrThrow("GOOGLE_CLIENT_ID");
+export const GOOGLE_CLIENT_SECRET = getEnvOrThrow("GOOGLE_CLIENT_SECRET");
+export const GOOGLE_REDIRECT_URI = getEnvOrThrow("GOOGLE_REDIRECT_URI");

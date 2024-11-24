@@ -5,7 +5,10 @@ import { MongoDBDoctorScheduleModel, MongoDBDoctorScheduleModelSchema } from "#/
 import { MongoDBScheduleModel, MongoDBScheduleModelSchema } from "#/modules/schedules/infrastructure/db/models/mongodb/mongodb-schedule.model";
 import { schedulesProviders } from "#/modules/schedules/infrastructure/di/doctor-schedule.provider";
 import { CreateDoctorScheduleController } from "#/modules/schedules/infrastructure/http/controllers/create-doctor-schedule.controller";
+import { CreateGoogleListEventsController } from "#/modules/schedules/infrastructure/http/controllers/create-schedule-google-list-events.controller";
+import { CreateGoogleScheduleController } from "#/modules/schedules/infrastructure/http/controllers/create-schedule-google.controller";
 import { CreateScheduleController } from "#/modules/schedules/infrastructure/http/controllers/create-schedule.controller";
+import { GoogleCalendarService } from "#/modules/schedules/infrastructure/http/services/google-calendar.service";
 import { UserModule } from "#/modules/user/infrastructure/di/user.module";
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -25,12 +28,18 @@ import { MongooseModule } from "@nestjs/mongoose";
     PatientModule,
     UserModule,
   ],
-  controllers: [CreateDoctorScheduleController, CreateScheduleController],
+  controllers: [
+    CreateDoctorScheduleController,
+    CreateScheduleController,
+    CreateGoogleScheduleController,
+    CreateGoogleListEventsController
+  ],
   providers: [
     ...schedulesProviders,
     CreateDoctorScheduleCommandHandler,
-    CreateScheduleCommandHandler
+    CreateScheduleCommandHandler,
+    GoogleCalendarService
   ],
-  exports: [...schedulesProviders]
+  exports: [...schedulesProviders, GoogleCalendarService]
 })
 export class ScheduleModule {}
